@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2 class="title">Tizimga kirish</h2>
+  <p class="muted small">Mijoz kirsa shop sahifa ochiladi, admin bo‘lsa admin panelga o‘tadi.</p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="field">
+      <label class="small muted">Username</label>
+      <input type="text" name="username" placeholder="Username" required />
+    </div>
+
+    <div class="field">
+      <label class="small muted">Parol</label>
+      <input type="password" name="password" placeholder="Parol" required />
+    </div>
+
+    <button class="btn" type="submit">Login</button>
+    <a class="btn outline" href="{% url 'register' %}">Register</a>
+  </form>
+</div>
+{% endblock %}

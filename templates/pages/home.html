@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% for cat, products in grouped.items %}
+  {% if cat %}
+    <div class="card" style="margin-top:16px;">
+      <h2 class="title">{{ cat.name }}</h2>
+    </div>
+  {% else %}
+    <div class="card" style="margin-top:16px;">
+      <h2 class="title"> Boshqa (Category yo‘q)</h2>
+    </div>
+  {% endif %}
+
+  {% for p in products %}
+    <div class="card">
+      <div class="row">
+        <div>
+          <h3 class="title">{{ p.title }}</h3>
+          <div class="price">Narx: {{ p.price }}</div>
+          <p class="muted">{{ p.description|default:""|truncatechars:160 }}</p>
+
+          <div class="row">
+            <a class="btn" href="{% url 'product_detail' p.id %}">Batafsil</a>
+            <a class="btn outline" href="{% url 'add_to_cart' p.id %}">Savatga qo‘shish</a>
+          </div>
+        </div>
+
+        <div style="margin-left:auto;">
+          {% if p.image %}
+            <img class="img" src="{{ p.image.url }}" alt="product">
+          {% else %}
+            <div class="img" style="display:flex;align-items:center;justify-content:center;width:220px;height:140px;">
+              <span class="muted small">Rasm yo‘q</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+{% empty %}
+  <div class="card">
+    <h3 class="title">Mahsulot topilmadi</h3>
+    <p class="muted small">Bu kategoriya ichida mahsulot yo‘q yoki is_active o‘chiq.</p>
+  </div>
+{% endfor %}
+
+{% endblock %}

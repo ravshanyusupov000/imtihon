@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2 class="title">Ro‘yxatdan o‘tish</h2>
+  <p class="muted small">Email yoki telefon bilan ro‘yxatdan o‘ting.</p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="field">
+      <label class="small muted">Username (ixtiyoriy)</label>
+      <input type="text" name="username" placeholder="masalan: ravshan" />
+    </div>
+
+    <div class="field">
+      <label class="small muted">Email yoki telefon</label>
+      <input type="text" name="email_or_phone" placeholder="example@mail.com yoki +99890..." required />
+    </div>
+
+    <div class="field">
+      <label class="small muted">Parol</label>
+      <input type="password" name="password" placeholder="Parol" required />
+    </div>
+
+    <button class="btn" type="submit">Register</button>
+    <a class="btn outline" href="{% url 'login' %}">Login</a>
+  </form>
+</div>
+{% endblock %}

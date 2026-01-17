@@ -1,10 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Detail{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <h2 class="title">{{ p.title }}</h2>
+  <div class="row">
+    <div style="flex:1;">
+      <p>{{ p.description }}</p>
+      <p class="price">Narx: {{ p.price }}</p>
+
+      <div class="row">
+        <a class="btn" href="{% url 'add_to_cart' p.id %}">Savatga qo‘shish</a>
+        <a class="btn outline" href="{% url 'home' %}">⬅️ Orqaga</a>
+      </div>
+    </div>
+
+    <div>
+      {% if p.image %}
+        <img class="img" src="{{ p.image.url }}" alt="product" />
+      {% else %}
+        <div class="img" style="display:flex;align-items:center;justify-content:center;width:220px;height:140px;">
+          <span class="muted small">Rasm yo‘q</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 class="title">Comment yozish</h3>
+  <form method="post">
+    {% csrf_token %}
+    <div class="field">
+      <textarea name="text" placeholder="Comment yozing..." required></textarea>
+    </div>
+    <button class="btn" type="submit">Yuborish</button>
+  </form>
+</div>
+
+<div class="card">
+  <h3 class="title">Commentlar</h3>
+
+  {% for c in comments %}
+    <div style="padding:10px 0;">
+      <div class="row" style="justify-content:space-between;">
+        <b>{{ c.user }}</b>
+        <span class="muted small">{{ c.created_at }}</span>
+      </div>
+      <p style="margin:8px 0;">{{ c.text }}</p>
+
+      <!-- Replies -->
+      {% for r in c.replies.all %}
+        <div class="reply">
+          <div class="row" style="justify-content:space-between;">
+            <b>{{ r.user }}</b>
+            <span class="muted small">{{ r.created_at }}</span>
+          </div>
+          <p style="margin:8px 0;">{{ r.text }}</p>
+        </div>
+      {% endfor %}
+
+      <!-- Reply form (oddiy) -->
+      <details style="margin-top:8px;">
+        <summary class="muted small" style="cursor:pointer;">Reply yozish</summary>
+        <form method="post" style="margin-top:8px;">
+          {% csrf_token %}
+          <input type="hidden" name="parent" value="{{ c.id }}">
+          <div class="field">
+            <textarea name="text" placeholder="Reply yozing..." required></textarea>
+          </div>
+          <button class="btn outline" type="submit">Reply yuborish</button>
+        </form>
+      </details>
+
+      <div class="hr"></div>
+    </div>
+  {% empty %}
+    <p class="muted">Hozircha comment yo‘q.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}
